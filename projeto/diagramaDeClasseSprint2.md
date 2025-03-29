@@ -77,7 +77,7 @@ Usuario <|-- Cliente
 Usuario <|-- Agente
 Agente <|-- Empresa
 Agente <|-- Banco
-Emprego "1" --* "0..3"Cliente
+Emprego "0..3" --* "1"Cliente
 
 Contrato "0..N" -- "1" Cliente
 Contrato "1" -- "1" PedidoAluguel
