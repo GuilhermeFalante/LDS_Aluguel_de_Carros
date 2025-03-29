@@ -1,35 +1,43 @@
 @startuml
-!define RECTANGLE class
-
-package "Usuarios" as usuarios {
-    class Usuario
-    class Cliente
-    class Agente
+package "pkg" {
+    package "configs" {
+    }
+    package "controllers" {
+    }
+    package "models" {
+    }
+    package "repositories" {
+    }
+    package "enumerators" {
+    }
+    package "utils" {
+    }
+    
+    package "dto" {
+        package "Agente" {
+        }
+        package "Banco" {
+        }
+        package "Cliente" {
+        }
+        package "Contrato" {
+        }
+        package "Empresa" {
+        }
+        package "Emprego" {
+        }
+        package "PedidoAluguel" {
+        }
+        package "Automovel" {
+        }
+    }
+    
+    controllers ..> configs
+    controllers ..> repositories
+    controllers ..> models
+    controllers ..> utils
+    controllers ..> dto
+    
+    models ..> enumerators
 }
-
-package "AgentesFinanceiros" as financeiro {
-    class Banco
-    class Empresa
-}
-
-package "Transacoes" as transacoes {
-    class PedidoAluguel
-    class Automovel
-}
-
-package "Contratos" as contratos {
-    class Contrato
-    enum TIPO_CONTRATO
-}
-
-package "Servidor" as servidor {
-    class Servidor
-}
-
-usuarios -[hidden]> financeiro
-usuarios -[hidden]> transacoes
-transacoes -[hidden]> contratos
-contratos -[hidden]> usuarios
-contratos -[hidden]> financeiro
-
 @enduml
