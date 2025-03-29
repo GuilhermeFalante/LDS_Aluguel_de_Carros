@@ -3,11 +3,9 @@ left to right direction
 
 actor Cliente
 actor Agente
-actor Empresa as Empresa
 actor Banco as Banco
 actor Usuario
 
-Agente <|-- Empresa
 Agente <|-- Banco
 Usuario <|-- Cliente
 Usuario <|-- Agente
@@ -23,21 +21,23 @@ rectangle "Sistema de Aluguel de Automóveis" {
     usecase "Executar Contrato" as UC9
     usecase "Realizar Cadastro" as UC14
     usecase "Analisar Pedido Financeiramente" as UC15
-    usecase "Contrato de cliente" as UC16
-    usecase "Contrato de empresa" as UC17
-    usecase "Contrato de banco" as UC18
+    usecase "Vincular automóvel" as UC16
+    usecase "Cadastrar automóveis" as UC19
+    usecase "Fazer login" as UC20
 }
 
-UC9 <|-- UC16
-UC9 <|-- UC17
-UC9 <|-- UC18
+UC8 .> UC19 : "include"
+
 Cliente --> UC2
 Cliente --> UC3
 Cliente --> UC4
 Cliente --> UC5
 
 Usuario --> UC14
+Usuario --> UC20
 
+Agente --> UC16
+Agente --> UC19
 Agente --> UC6
 Agente --> UC7
 Banco --> UC8

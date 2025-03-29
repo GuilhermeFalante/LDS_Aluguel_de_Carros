@@ -26,6 +26,7 @@ class Cliente {
 }
 
 class Agente {
+    -cpf: String
     +modificarPedido(idPedido: int): void
     +avaliarPedido(idPedido: int): pedido
     +executarContrato(idPedido: int, tipoCliente: cpfCliente): pedido
