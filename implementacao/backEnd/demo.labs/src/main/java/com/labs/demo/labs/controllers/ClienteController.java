@@ -18,7 +18,7 @@ public class ClienteController {
 
     @PostMapping
     public Cliente criar(@RequestBody Cliente cliente) {
-           return clienteService.criarCliente(cliente);
+        return clienteService.criarCliente(cliente);
     }
 
     @GetMapping
@@ -37,7 +37,7 @@ public class ClienteController {
             @PathVariable String cpf,
             @RequestBody Cliente clienteAtualizado) {
         try {
-            Cliente cliente = clienteService.atualizarCliente(cpf, clienteAtualizado);
+            Cliente cliente = clienteService.atualizarDadosCliente(cpf, clienteAtualizado);
             return ResponseEntity.ok(cliente);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();

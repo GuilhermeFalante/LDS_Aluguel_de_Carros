@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Service
 public class ClienteService {
- 
+
     @Autowired
     private final ClienteRepository clienteRepository;
 
@@ -32,25 +32,21 @@ public class ClienteService {
     public List<Cliente> listarTodosClientes() {
         return clienteRepository.findAll();
     }
+
     public Optional<Cliente> buscarPorCpf(String cpf) {
         return clienteRepository.findById(cpf);
     }
 
     @Transactional
-    public Cliente atualizarCliente(String cpf, Cliente clienteAtualizado) {
+    public Cliente atualizarDadosCliente(String cpf, Cliente clienteAtualizado) {
         return clienteRepository.findById(cpf)
                 .map(cliente -> {
-                    cliente.setRg(clienteAtualizado.getRg());
-                    cliente.setEndereco(clienteAtualizado.getEndereco());
-                    
-                    if (clienteAtualizado.getEmpregos() != null) {
-                        if (clienteAtualizado.getEmpregos().size() > cliente.getLimRendimentos()) {
-                            throw new IllegalArgumentException("Número de empregos excede o limite permitido");
-                        }
-                        cliente.getEmpregos().clear();
-                        cliente.getEmpregos().addAll(clienteAtualizado.getEmpregos());
+                    if (clienteAtualizado.getRg() != null) {
+                        cliente.setRg(clienteAtualizado.getRg());
                     }
-                    
+                    if (clienteAtualizado.getEndereco() != null) {
+                        cliente.setEndereco(clienteAtualizado.getEndereco());
+                    }
                     return clienteRepository.save(cliente);
                 })
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado com CPF: " + cpf));
@@ -65,11 +61,11 @@ public class ClienteService {
     public Cliente adicionarEmprego(String cpf, Emprego emprego) {
         Cliente cliente = clienteRepository.findById(cpf)
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado com CPF: " + cpf));
-        
+
         if (cliente.getEmpregos().size() >= cliente.getLimRendimentos()) {
             throw new IllegalArgumentException("Limite máximo de empregos atingido para este cliente");
         }
-        
+
         cliente.getEmpregos().add(emprego);
         return clienteRepository.save(cliente);
     }
@@ -78,7 +74,7 @@ public class ClienteService {
     public Cliente removerEmprego(String cpf, Long empregoId) {
         Cliente cliente = clienteRepository.findById(cpf)
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado com CPF: " + cpf));
-        
+
         cliente.getEmpregos().removeIf(emprego -> emprego.getId().equals(empregoId));
         return clienteRepository.save(cliente);
     }
@@ -86,7 +82,7 @@ public class ClienteService {
     public List<Emprego> listarEmpregosDoCliente(String cpf) {
         Cliente cliente = clienteRepository.findById(cpf)
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado com CPF: " + cpf));
-        
+
         return cliente.getEmpregos();
     }
 }
