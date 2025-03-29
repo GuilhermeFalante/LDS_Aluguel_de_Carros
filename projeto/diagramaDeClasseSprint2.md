@@ -17,7 +17,7 @@ class Cliente {
     -rg: string
     -cpf: string
     -endereco: string
-    -profissao: string
+    -emprego: Emprego
     -LimRendimentos: int = 3
     +introduzirPedido(): void
     +modificarPedido(idPedido: int): void
