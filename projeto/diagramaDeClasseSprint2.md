@@ -4,9 +4,10 @@ abstract Usuario {
     -email: string
     -senha: string
     +cadastrar()
+    +logar()
 }
 
-enum TIPO_CONTRATO {
+enum TIPO_DONO {
     CLIENTE,
     EMPRESA,
     BANCO
@@ -28,12 +29,14 @@ class Agente {
     +modificarPedido(idPedido: int): void
     +avaliarPedido(idPedido: int): pedido
     +executarContrato(idPedido: int, tipoCliente: cpfCliente): pedido
+    +gerenciarAutomoveis(): void
 }
 
 class Empresa {
 }
 
 class Banco {
+    -cnpj: String
     +concederContratoCredito(idContrato: int): contrato
     +analisarPedidoFinanceiramente(idPedido: int): pedido
 }
@@ -43,7 +46,8 @@ class PedidoAluguel {
     -Status: boolean
     -Valor: float
     -idCliente: int
-    -matriculaCarro: String
+    -tipoDono: TIPO_DONO
+    -automovel: Automovel
     
 }
 
@@ -53,7 +57,6 @@ class Contrato {
     -status: boolean
     -valor: float
     -contratoDeCredito: int
-    -tipoContrato : TIPO_CONTRATO
 }
 
 class Automovel {
@@ -64,20 +67,21 @@ class Automovel {
     -placa: string
 }
 
-class Servidor {
-    +gerenciarVeiculos(): void
-    +gerenciarPedidos(): void
+class Emprego {
+    -empregador: String
+    -salario: Double
 }
 
 Usuario <|-- Cliente
 Usuario <|-- Agente
 Agente <|-- Empresa
 Agente <|-- Banco
+Emprego "1" --* "0..3"Cliente
 
+Contrato "0..N" -- "1" Cliente
+Contrato "1" -- "1" PedidoAluguel
 Cliente "1" -- "N" PedidoAluguel
 Agente "1" -- "N" PedidoAluguel 
 Banco "1" -- "N" PedidoAluguel 
 PedidoAluguel "1" -- "N" Automovel
-Servidor -- PedidoAluguel  
-Servidor -- Automovel
 @enduml
