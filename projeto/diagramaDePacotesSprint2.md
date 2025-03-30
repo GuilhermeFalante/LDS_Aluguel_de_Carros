@@ -1,17 +1,14 @@
 @startuml
 package "pkg" {
-    package "configs" {
-    }
     package "controllers" {
     }
     package "models" {
     }
     package "repositories" {
     }
-    package "enumerators" {
+    package "view" {
     }
-    package "utils" {
-    }
+
     
     package "dto" {
         package "Agente" {
@@ -32,12 +29,11 @@ package "pkg" {
         }
     }
     
-    controllers ..> configs
+
     controllers ..> repositories
     controllers ..> models
-    controllers ..> utils
     controllers ..> dto
+    view ..> controllers :HTTP
     
-    models ..> enumerators
 }
 @enduml
