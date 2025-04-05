@@ -8,6 +8,8 @@ package "pkg" {
     }
     package "view" {
     }
+    package "service" {
+    }
 
     
     package "dto" {
@@ -33,6 +35,7 @@ package "pkg" {
     controllers ..> repositories
     controllers ..> models
     controllers ..> dto
+    controllers ..> service
     view ..> controllers :HTTP
     
 }

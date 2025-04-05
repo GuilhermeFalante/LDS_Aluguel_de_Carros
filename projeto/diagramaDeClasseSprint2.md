@@ -54,7 +54,7 @@ class PedidoAluguel {
 
 class Contrato {
     -id: int
-    -idPedido: int
+    -pedido: Pedido
     -status: boolean
     -valor: float
     -contratoDeCredito: int

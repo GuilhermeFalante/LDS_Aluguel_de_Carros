@@ -26,8 +26,6 @@ rectangle "Sistema de Aluguel de Automóveis" {
     usecase "Fazer login" as UC20
 }
 
-UC8 .> UC19 : "include"
-
 Cliente --> UC2
 Cliente --> UC3
 Cliente --> UC4
