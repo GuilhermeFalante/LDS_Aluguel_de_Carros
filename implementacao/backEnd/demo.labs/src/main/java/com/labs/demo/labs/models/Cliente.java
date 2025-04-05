@@ -20,7 +20,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Cliente extends Usuario{
-
+ 
     @Column(nullable = false, unique = true)
     private String cpf;
 

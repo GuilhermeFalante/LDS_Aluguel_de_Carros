@@ -46,7 +46,7 @@ class PedidoAluguel {
     -id: int
     -Status: boolean
     -Valor: float
-    -idCliente: int
+    -cliente: Cliente
     -tipoDono: TIPO_DONO
     -automovel: Automovel
     
