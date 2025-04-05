@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Service
 public class UsuarioService {
-    
+
     @Autowired
     private final UsuarioRepository usuarioRepository;
 
@@ -40,11 +40,11 @@ public class UsuarioService {
     public Usuario atualizarUsuario(Long id, Usuario usuarioAtualizado) {
         return usuarioRepository.findById(id)
                 .map(usuario -> {
-                    if (!usuario.getEmail().equals(usuarioAtualizado.getEmail()) && 
-                        usuarioRepository.existsByEmail(usuarioAtualizado.getEmail())) {
+                    if (!usuario.getEmail().equals(usuarioAtualizado.getEmail()) &&
+                            usuarioRepository.existsByEmail(usuarioAtualizado.getEmail())) {
                         throw new RuntimeException("Email já está em uso por outro usuário");
                     }
-                    
+
                     usuario.setNome(usuarioAtualizado.getNome());
                     usuario.setEmail(usuarioAtualizado.getEmail());
                     usuario.setSenha(usuarioAtualizado.getSenha());
@@ -59,4 +59,16 @@ public class UsuarioService {
         }
         usuarioRepository.deleteById(id);
     }
+
+public Usuario autenticar(String email, String senha) {
+    Usuario usuario = usuarioRepository.findByEmail(email)
+        .orElseThrow(() -> new RuntimeException("Credenciais inválidas"));
+    
+    if (!usuario.getSenha().equals(senha)) {
+        throw new RuntimeException("Credenciais inválidas");
+    }
+    
+    return usuario;
+}
+
 }

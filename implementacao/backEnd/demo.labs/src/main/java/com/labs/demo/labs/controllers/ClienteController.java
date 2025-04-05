@@ -27,62 +27,62 @@ public class ClienteController {
         return clienteService.listarTodosClientes();
     }
 
-    @GetMapping("/{cpf}")
-    public ResponseEntity<Cliente> buscarPorCpf(@PathVariable String cpf) {
-        Optional<Cliente> cliente = clienteService.buscarPorCpf(cpf);
+    @GetMapping("/{id}")
+    public ResponseEntity<Cliente> buscarPorCpf(@PathVariable Long id) {
+        Optional<Cliente> cliente = clienteService.buscarPorId(id);
         return cliente.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/{cpf}")
+    @PutMapping("/{id}")
     public ResponseEntity<?> atualizarCliente(
-            @PathVariable String cpf,
+            @PathVariable Long id,
             @RequestBody Cliente clienteAtualizado) {
         try {
-            Cliente cliente = clienteService.atualizarDadosCliente(cpf, clienteAtualizado);
+            Cliente cliente = clienteService.atualizarDadosCliente(id, clienteAtualizado);
             return ResponseEntity.ok(cliente);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
     }
 
-    @DeleteMapping("/{cpf}")
-    public ResponseEntity<Void> deletarCliente(@PathVariable String cpf) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarCliente(@PathVariable Long id) {
         try {
-            clienteService.deletarCliente(cpf);
+            clienteService.deletarCliente(id);
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }
 
-    @PostMapping("/{cpf}/empregos")
+    @PostMapping("/{id}/empregos")
     public ResponseEntity<?> adicionarEmprego(
-            @PathVariable String cpf,
+            @PathVariable Long id,
             @RequestBody Emprego emprego) {
         try {
-            Cliente cliente = clienteService.adicionarEmprego(cpf, emprego);
+            Cliente cliente = clienteService.adicionarEmprego(id, emprego);
             return ResponseEntity.ok(cliente);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
     }
 
-    @DeleteMapping("/{cpf}/empregos/{empregoId}")
+    @DeleteMapping("/{id}/empregos/{empregoId}")
     public ResponseEntity<?> removerEmprego(
-            @PathVariable String cpf,
+            @PathVariable Long id,
             @PathVariable Long empregoId) {
         try {
-            Cliente cliente = clienteService.removerEmprego(cpf, empregoId);
+            Cliente cliente = clienteService.removerEmprego(id, empregoId);
             return ResponseEntity.ok(cliente);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
     }
 
-    @GetMapping("/{cpf}/empregos")
-    public ResponseEntity<?> listarEmpregosDoCliente(@PathVariable String cpf) {
+    @GetMapping("/{id}/empregos")
+    public ResponseEntity<?> listarEmpregosDoCliente(@PathVariable Long id) {
         try {
-            List<Emprego> empregos = clienteService.listarEmpregosDoCliente(cpf);
+            List<Emprego> empregos = clienteService.listarEmpregosDoCliente(id);
             return ResponseEntity.ok(empregos);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();

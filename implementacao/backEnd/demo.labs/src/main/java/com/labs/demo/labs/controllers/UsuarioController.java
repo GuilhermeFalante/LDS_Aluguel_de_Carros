@@ -88,4 +88,17 @@ public class UsuarioController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
+
+@GetMapping("/login")
+public ResponseEntity<Usuario> login(
+    @RequestParam String email,
+    @RequestParam String senha) {
+    
+    try {
+        Usuario usuario = usuarioService.autenticar(email, senha);
+        return ResponseEntity.ok(usuario);
+    } catch (RuntimeException e) {
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Credenciais inválidas");
+    }
+}
 }

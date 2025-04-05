@@ -3,18 +3,14 @@ package com.labs.demo.labs.services;
 import com.labs.demo.labs.models.Cliente;
 import com.labs.demo.labs.models.Emprego;
 import com.labs.demo.labs.repositories.ClienteRepository;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class ClienteService {
 
-    @Autowired
     private final ClienteRepository clienteRepository;
 
     public ClienteService(ClienteRepository clienteRepository) {
@@ -33,13 +29,13 @@ public class ClienteService {
         return clienteRepository.findAll();
     }
 
-    public Optional<Cliente> buscarPorCpf(String cpf) {
-        return clienteRepository.findById(cpf);
+    public Optional<Cliente> buscarPorId(Long id) {
+        return clienteRepository.findById(id);
     }
 
     @Transactional
-    public Cliente atualizarDadosCliente(String cpf, Cliente clienteAtualizado) {
-        return clienteRepository.findById(cpf)
+    public Cliente atualizarDadosCliente(Long id, Cliente clienteAtualizado) {
+        return clienteRepository.findById(id)
                 .map(cliente -> {
                     if (clienteAtualizado.getRg() != null) {
                         cliente.setRg(clienteAtualizado.getRg());
@@ -49,18 +45,18 @@ public class ClienteService {
                     }
                     return clienteRepository.save(cliente);
                 })
-                .orElseThrow(() -> new RuntimeException("Cliente não encontrado com CPF: " + cpf));
+                .orElseThrow(() -> new RuntimeException("Cliente não encontrado com o id: " + id));
     }
 
     @Transactional
-    public void deletarCliente(String cpf) {
-        clienteRepository.deleteById(cpf);
+    public void deletarCliente(Long id) {
+        clienteRepository.deleteById(id);
     }
 
     @Transactional
-    public Cliente adicionarEmprego(String cpf, Emprego emprego) {
-        Cliente cliente = clienteRepository.findById(cpf)
-                .orElseThrow(() -> new RuntimeException("Cliente não encontrado com CPF: " + cpf));
+    public Cliente adicionarEmprego(Long id, Emprego emprego) {
+        Cliente cliente = clienteRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Cliente não encontrado com o id: " + id));
 
         if (cliente.getEmpregos().size() >= cliente.getLimRendimentos()) {
             throw new IllegalArgumentException("Limite máximo de empregos atingido para este cliente");
@@ -71,17 +67,17 @@ public class ClienteService {
     }
 
     @Transactional
-    public Cliente removerEmprego(String cpf, Long empregoId) {
-        Cliente cliente = clienteRepository.findById(cpf)
-                .orElseThrow(() -> new RuntimeException("Cliente não encontrado com CPF: " + cpf));
+    public Cliente removerEmprego(Long id, Long empregoId) {
+        Cliente cliente = clienteRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Cliente não encontrado com o id: " + id));
 
         cliente.getEmpregos().removeIf(emprego -> emprego.getId().equals(empregoId));
         return clienteRepository.save(cliente);
     }
 
-    public List<Emprego> listarEmpregosDoCliente(String cpf) {
-        Cliente cliente = clienteRepository.findById(cpf)
-                .orElseThrow(() -> new RuntimeException("Cliente não encontrado com CPF: " + cpf));
+    public List<Emprego> listarEmpregosDoCliente(Long id) {
+        Cliente cliente = clienteRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Cliente não encontrado com o id: " + id));
 
         return cliente.getEmpregos();
     }
