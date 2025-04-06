@@ -20,7 +20,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Cliente extends Usuario{
- 
+    
     @Column(nullable = false, unique = true)
     private String cpf;
 
@@ -34,5 +34,8 @@ public class Cliente extends Usuario{
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Emprego> empregos = new ArrayList<>();
+
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PedidoAluguel> pedidosAluguel = new ArrayList<>();
 
 }

@@ -3,7 +3,6 @@ package com.labs.demo.labs.services;
 import com.labs.demo.labs.Enums.TIPO_DONO;
 import com.labs.demo.labs.models.Automovel;
 import com.labs.demo.labs.repositories.AutomovelRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,7 +13,6 @@ public class AutomovelService {
 
     private final AutomovelRepository automovelRepository;
 
-    @Autowired
     public AutomovelService(AutomovelRepository automovelRepository) {
         this.automovelRepository = automovelRepository;
     }

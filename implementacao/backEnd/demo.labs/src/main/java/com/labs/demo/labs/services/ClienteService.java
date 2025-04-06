@@ -19,6 +19,10 @@ public class ClienteService {
 
     @Transactional
     public Cliente criarCliente(Cliente cliente) {
+        if (clienteRepository.findByCpf(cliente.getCpf()).isPresent()) {
+            throw new IllegalArgumentException("Já existe um cliente com este CPF");
+        }
+        
         if (cliente.getEmpregos() != null && cliente.getEmpregos().size() > cliente.getLimRendimentos()) {
             throw new IllegalArgumentException("Número de empregos excede o limite permitido");
         }
@@ -29,28 +33,34 @@ public class ClienteService {
         return clienteRepository.findAll();
     }
 
+    public Optional<Cliente> buscarPorCpf(String cpf) {
+        return clienteRepository.findByCpf(cpf);
+    }
+
     public Optional<Cliente> buscarPorId(Long id) {
         return clienteRepository.findById(id);
     }
 
     @Transactional
-    public Cliente atualizarDadosCliente(Long id, Cliente clienteAtualizado) {
-        return clienteRepository.findById(id)
-                .map(cliente -> {
-                    if (clienteAtualizado.getRg() != null) {
-                        cliente.setRg(clienteAtualizado.getRg());
-                    }
-                    if (clienteAtualizado.getEndereco() != null) {
-                        cliente.setEndereco(clienteAtualizado.getEndereco());
-                    }
-                    return clienteRepository.save(cliente);
-                })
-                .orElseThrow(() -> new RuntimeException("Cliente não encontrado com o id: " + id));
+    public Cliente atualizarDadosCliente(String cpf, Cliente clienteAtualizado) {
+        Cliente cliente = clienteRepository.findByCpf(cpf)
+                .orElseThrow(() -> new RuntimeException("Cliente não encontrado com o CPF: " + cpf));
+
+        if (clienteAtualizado.getRg() != null) {
+            cliente.setRg(clienteAtualizado.getRg());
+        }
+        if (clienteAtualizado.getEndereco() != null) {
+            cliente.setEndereco(clienteAtualizado.getEndereco());
+        }
+        
+        return clienteRepository.save(cliente);
     }
 
     @Transactional
-    public void deletarCliente(Long id) {
-        clienteRepository.deleteById(id);
+    public void deletarCliente(String cpf) {
+        Cliente cliente = clienteRepository.findByCpf(cpf)
+                .orElseThrow(() -> new RuntimeException("Cliente não encontrado com o CPF: " + cpf));
+        clienteRepository.delete(cliente);
     }
 
     @Transactional

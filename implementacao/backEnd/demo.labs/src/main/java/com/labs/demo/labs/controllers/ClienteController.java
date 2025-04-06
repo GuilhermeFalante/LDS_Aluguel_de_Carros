@@ -18,8 +18,13 @@ public class ClienteController {
     private ClienteService clienteService;
 
     @PostMapping
-    public Cliente criar(@RequestBody Cliente cliente) {
-        return clienteService.criarCliente(cliente);
+    public ResponseEntity<?> criar(@RequestBody Cliente cliente) {
+        try {
+            Cliente novoCliente = clienteService.criarCliente(cliente);
+            return ResponseEntity.ok(novoCliente);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping
@@ -27,30 +32,30 @@ public class ClienteController {
         return clienteService.listarTodosClientes();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Cliente> buscarPorCpf(@PathVariable Long id) {
-        Optional<Cliente> cliente = clienteService.buscarPorId(id);
+    @GetMapping("/{cpf}")
+    public ResponseEntity<Cliente> buscarPorCpf(@PathVariable String cpf) {
+        Optional<Cliente> cliente = clienteService.buscarPorCpf(cpf);
         return cliente.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{cpf}")
     public ResponseEntity<?> atualizarCliente(
-            @PathVariable Long id,
+            @PathVariable String cpf,
             @RequestBody Cliente clienteAtualizado) {
         try {
-            Cliente cliente = clienteService.atualizarDadosCliente(id, clienteAtualizado);
+            Cliente cliente = clienteService.atualizarDadosCliente(cpf, clienteAtualizado);
             return ResponseEntity.ok(cliente);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarCliente(@PathVariable Long id) {
+    @DeleteMapping("/{cpf}")
+    public ResponseEntity<?> deletarCliente(@PathVariable String cpf) {
         try {
-            clienteService.deletarCliente(id);
+            clienteService.deletarCliente(cpf);
             return ResponseEntity.noContent().build();
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
     }
