@@ -12,6 +12,7 @@ export default function Home() {
                     <li><Link to="/veiculos">Ver Veículos</Link></li>
                     <li><Link to="/clientes">Ver Clientes</Link></li>
                     <li><Link to="/pedidos">Ver Pedidos de Aluguel</Link></li>
+                    <li><Link to="/login">Fazer login</Link></li>
                 </ul>
             </nav>
         </div>
