@@ -24,6 +24,15 @@ public class AutomovelService {
         return automovelRepository.save(automovel);
     }
 
+    public Automovel alterarDisponibilidade(String matricula, boolean disponivel) {
+        return automovelRepository.findById(matricula)
+                .map(automovel -> {
+                    automovel.setDisponivel(disponivel);
+                    return automovelRepository.save(automovel);
+                })
+                .orElseThrow(() -> new RuntimeException("Automóvel não encontrado com a matrícula: " + matricula));
+    }
+
     public List<Automovel> listarTodosAutomoveis() {
         return automovelRepository.findAll();
     }
@@ -53,6 +62,7 @@ public class AutomovelService {
                     automovel.setModelo(automovelAtualizado.getModelo());
                     automovel.setPlaca(automovelAtualizado.getPlaca());
                     automovel.setTipoDono(automovelAtualizado.getTipoDono());
+                    automovel.setDisponivel(automovelAtualizado.getDisponivel());
                     
                     return automovelRepository.save(automovel);
                 })

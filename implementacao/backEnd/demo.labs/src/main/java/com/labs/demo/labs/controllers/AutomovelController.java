@@ -25,6 +25,15 @@ public class AutomovelController {
         return ResponseEntity.ok(automovelService.listarTodosAutomoveis());
     }
 
+    @PatchMapping("/{matricula}/disponibilidade")
+    public ResponseEntity<Automovel> alterarDisponibilidade(
+            @PathVariable String matricula,
+            @RequestParam boolean disponivel) {
+
+        Automovel automovel = automovelService.alterarDisponibilidade(matricula, disponivel);
+        return ResponseEntity.ok(automovel);
+    }
+
     @GetMapping("/{matricula}")
     public ResponseEntity<Automovel> buscarPorMatricula(@PathVariable String matricula) {
         return automovelService.buscarAutomovelPorMatricula(matricula)
@@ -47,6 +56,7 @@ public class AutomovelController {
     @PostMapping
     public ResponseEntity<Automovel> criarAutomovel(@RequestBody Automovel automovel) {
         try {
+            automovel.setDisponivel(true);
             Automovel novoAutomovel = automovelService.cadastrarAutomovel(automovel);
             return ResponseEntity.status(HttpStatus.CREATED).body(novoAutomovel);
         } catch (RuntimeException e) {
@@ -56,24 +66,23 @@ public class AutomovelController {
 
     @PutMapping("/{matricula}")
     public ResponseEntity<Automovel> atualizarAutomovel(
-            @PathVariable String matricula, 
+            @PathVariable String matricula,
             @RequestBody Automovel automovel) {
-        
+
         if (automovel.getMatricula() != null && !automovel.getMatricula().equals(matricula)) {
             throw new ResponseStatusException(
-                HttpStatus.BAD_REQUEST, 
-                "Matrícula do corpo não corresponde à matrícula da URL"
-            );
+                    HttpStatus.BAD_REQUEST,
+                    "Matrícula do corpo não corresponde à matrícula da URL");
         }
 
         try {
             return ResponseEntity.ok(automovelService.atualizarAutomovel(matricula, automovel));
         } catch (RuntimeException e) {
             String mensagem = e.getMessage();
-            HttpStatus status = mensagem.startsWith("Automóvel não encontrado") 
-                ? HttpStatus.NOT_FOUND 
-                : HttpStatus.BAD_REQUEST;
-            
+            HttpStatus status = mensagem.startsWith("Automóvel não encontrado")
+                    ? HttpStatus.NOT_FOUND
+                    : HttpStatus.BAD_REQUEST;
+
             throw new ResponseStatusException(status, mensagem);
         }
     }

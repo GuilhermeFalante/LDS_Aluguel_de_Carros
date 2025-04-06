@@ -30,6 +30,9 @@ public class Automovel {
     @Column(nullable = false, unique = true)
     private String placa;
 
+    @Column(nullable = false, unique = true, columnDefinition = "boolean default true")
+    private Boolean disponivel = true;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TIPO_DONO tipoDono = TIPO_DONO.CLIENTE;

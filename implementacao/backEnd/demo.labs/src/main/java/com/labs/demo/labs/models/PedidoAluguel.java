@@ -1,5 +1,6 @@
 package com.labs.demo.labs.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.labs.demo.labs.Enums.STATUS_PEDIDO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -30,9 +31,11 @@ public class PedidoAluguel {
 
     @ManyToOne
     @JoinColumn(name = "cliente_id")
+    @JsonIgnore
     private Cliente cliente;
 
     @ManyToOne
     @JoinColumn(name = "automovel_matricula")
+    @JsonIgnore
     private Automovel automovel;
 }

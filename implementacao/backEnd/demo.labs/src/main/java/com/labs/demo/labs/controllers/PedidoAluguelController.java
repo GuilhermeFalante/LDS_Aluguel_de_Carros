@@ -3,7 +3,9 @@ package com.labs.demo.labs.controllers;
 import com.labs.demo.labs.models.PedidoAluguel;
 import com.labs.demo.labs.models.Cliente;
 import com.labs.demo.labs.models.Automovel;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.labs.demo.labs.Enums.STATUS_PEDIDO;
+import com.labs.demo.labs.services.AutomovelService;
 import com.labs.demo.labs.services.PedidoAluguelService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +19,15 @@ import java.util.Optional;
 public class PedidoAluguelController {
 
     private final PedidoAluguelService pedidoAluguelService;
+    private final AutomovelService automovelService;
 
-    public PedidoAluguelController(PedidoAluguelService pedidoAluguelService) {
+    public PedidoAluguelController(PedidoAluguelService pedidoAluguelService, 
+                                 AutomovelService automovelService) {
         this.pedidoAluguelService = pedidoAluguelService;
+        this.automovelService = automovelService;
     }
 
+    @JsonIgnore
     @PostMapping
     public ResponseEntity<PedidoAluguel> criarPedidoAluguel(
             @RequestParam String cpf,
@@ -29,8 +35,18 @@ public class PedidoAluguelController {
             @RequestParam float valor,
             @RequestParam int contratoDeCredito) {
         
+        Automovel automovel = automovelService.buscarAutomovelPorMatricula(automovelMatricula)
+                .orElseThrow(() -> new RuntimeException("Automóvel não encontrado"));
+        
+        if (!automovel.getDisponivel()) {
+            throw new RuntimeException("O automóvel não está disponível para aluguel");
+        }
+        
         PedidoAluguel novoPedido = pedidoAluguelService.criarPedidoAluguel(
                 cpf, automovelMatricula, valor, contratoDeCredito);
+        
+        automovel.setDisponivel(false);
+        automovelService.atualizarAutomovel(automovelMatricula, automovel);
         
         return ResponseEntity.status(HttpStatus.CREATED).body(novoPedido);
     }
@@ -70,7 +86,7 @@ public class PedidoAluguelController {
     public ResponseEntity<PedidoAluguel> atualizarPedido(
             @PathVariable int id,
             @RequestBody PedidoAluguel pedidoAtualizado) {
-        
+
         PedidoAluguel pedido = pedidoAluguelService.atualizarPedido(id, pedidoAtualizado);
         return ResponseEntity.ok(pedido);
     }
@@ -79,7 +95,7 @@ public class PedidoAluguelController {
     public ResponseEntity<PedidoAluguel> atualizarStatusPedido(
             @PathVariable int id,
             @RequestParam STATUS_PEDIDO novoStatus) {
-        
+
         PedidoAluguel pedido = pedidoAluguelService.atualizarStatusPedido(id, novoStatus);
         return ResponseEntity.ok(pedido);
     }
