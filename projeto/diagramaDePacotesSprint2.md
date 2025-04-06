@@ -10,6 +10,9 @@ package "pkg" {
     }
     package "service" {
     }
+    package "enum" {
+    }
+
 
     
     package "dto" {
@@ -36,6 +39,7 @@ package "pkg" {
     controllers ..> models
     controllers ..> dto
     controllers ..> service
+    controllers ..> enum
     view ..> controllers :HTTP
     
 }

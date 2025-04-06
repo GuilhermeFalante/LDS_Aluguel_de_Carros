@@ -13,6 +13,12 @@ enum TIPO_DONO {
     BANCO
 }
 
+enum STATUS_PEDIDO {
+    FECHADO,
+    ABERTO,
+    APROVADO
+}
+
 class Cliente {
     -rg: string
     -cpf: string
@@ -47,8 +53,8 @@ class PedidoAluguel {
     -Status: boolean
     -Valor: float
     -cliente: Cliente
-    -tipoDono: TIPO_DONO
     -automovel: Automovel
+    -contratoDeCredito: Double
     
 }
 
@@ -66,6 +72,7 @@ class Automovel {
     -marca: string
     -modelo: string
     -placa: string
+    -tipoDono: TIPO_DONO
 }
 
 class Emprego {
