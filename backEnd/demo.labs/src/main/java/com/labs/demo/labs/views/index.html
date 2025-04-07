@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Clientes</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Gestão de Clientes</h1>
+        
+        <div class="tab">
+            <button class="tablinks active" onclick="openTab(event, 'clientes')">Clientes</button>
+            <button class="tablinks" onclick="openTab(event, 'novoCliente')">Novo Cliente</button>
+        </div>
+        
+        <div id="clientes" class="tabcontent" style="display: block;">
+            <h2>Lista de Clientes</h2>
+            <table id="clientesTable">
+                <thead>
+                    <tr>
+                        <th>CPF</th>
+                        <th>RG</th>
+                        <th>Endereço</th>
+                        <th>Empregos</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="clientesBody"></tbody>
+            </table>
+        </div>
+        
+        <div id="novoCliente" class="tabcontent">
+            <h2>Cadastrar Novo Cliente</h2>
+            <form id="clienteForm">
+                <div class="form-group">
+                    <label for="cpf">CPF:</label>
+                    <input type="text" id="cpf" required>
+                </div>
+                <div class="form-group">
+                    <label for="rg">RG:</label>
+                    <input type="text" id="rg" required>
+                </div>
+                <div class="form-group">
+                    <label for="endereco">Endereço:</label>
+                    <input type="text" id="endereco" required>
+                </div>
+                <div class="form-group">
+                    <label>Empregos:</label>
+                    <div id="empregosContainer"></div>
+                    <button type="button" onclick="adicionarEmpregoForm()">Adicionar Emprego</button>
+                </div>
+                <button type="submit">Salvar</button>
+            </form>
+        </div>
+    </div>
+    
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Editar Cliente</h2>
+            <form id="editClienteForm">
+                <input type="hidden" id="editCpf">
+                <div class="form-group">
+                    <label for="editRg">RG:</label>
+                    <input type="text" id="editRg" required>
+                </div>
+                <div class="form-group">
+                    <label for="editEndereco">Endereço:</label>
+                    <input type="text" id="editEndereco" required>
+                </div>
+                <button type="submit">Atualizar</button>
+            </form>
+        </div>
+    </div>
+    
+    <div id="empregosModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEmpregosModal()">&times;</span>
+            <h2>Empregos do Cliente</h2>
+            <div id="empregosList"></div>
+            <h3>Adicionar Novo Emprego</h3>
+            <form id="novoEmpregoForm">
+                <input type="hidden" id="clienteCpf">
+                <div class="form-group">
+                    <label for="empregador">Empregador:</label>
+                    <input type="text" id="empregador" required>
+                </div>
+                <div class="form-group">
+                    <label for="salario">Salário:</label>
+                    <input type="number" step="0.01" id="salario" required>
+                </div>
+                <button type="submit">Adicionar</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
