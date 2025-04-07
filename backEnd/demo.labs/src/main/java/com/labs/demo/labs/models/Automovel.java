@@ -30,7 +30,7 @@ public class Automovel {
     @Column(nullable = false, unique = true)
     private String placa;
 
-    @Column(nullable = false, unique = true, columnDefinition = "boolean default true")
+    @Column(nullable = false, columnDefinition = "boolean default true")
     private Boolean disponivel = true;
 
     @Enumerated(EnumType.STRING)
