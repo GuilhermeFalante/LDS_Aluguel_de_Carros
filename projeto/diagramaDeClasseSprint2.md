@@ -73,6 +73,7 @@ class Automovel {
     -modelo: string
     -placa: string
     -tipoDono: TIPO_DONO
+    -disponivel: boolean
 }
 
 class Emprego {
